@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC -std=c++11 -O2 -march=native  -shared  -o "/content/drive/Othercomputers/My MacBook Pro/hw3/python/needle/backend_ndarray/ndarray_backend_cpu.cpython-310-x86_64-linux-gnu.so" CMakeFiles/ndarray_backend_cpu.dir/src/ndarray_backend_cpu.cc.o 

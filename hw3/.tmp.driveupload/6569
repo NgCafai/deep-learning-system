@@ -1,0 +1,1005 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "id": "b38216e2",
+      "metadata": {
+        "id": "b38216e2"
+      },
+      "source": [
+        "# Homework 3: Building an NDArray library\n",
+        "\n",
+        "In this homework, you will build a simple backing library for the processing that underlies most deep learning systems: the n-dimensional array (a.k.a. the NDArray).  Up until now, you have largely been using numpy for this purpose, but this homework will walk you through developing what amounts to your own (albeit much more limited) variant of numpy, which will support both CPU and GPU backends.  What's more, unlike numpy (and even variants like PyTorch), you won't simply call out to existing highly-optimized variants of matrix multiplication or other manipulation code, but actually write your own versions that are reasonably competitive will the highly optimized code backing these standard libraries (by some measure, i.e., \"only 2-3x slower\" ... which is a whole lot better than naive code that can easily be 100x slower).  This class will ultimately be integrated into `needle`, but for this assignment you can _only_ focus on the ndarray module, as this will be the only subject of the tests.\n",
+        "\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 1,
+      "id": "db5a484c",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "db5a484c",
+        "outputId": "91451b30-df34-484c-db74-41387ea06129"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Mounted at /content/drive\n",
+            "Collecting git+https://github.com/dlsys10714/mugrade.git\n",
+            "  Cloning https://github.com/dlsys10714/mugrade.git to /tmp/pip-req-build-vcz6rbdf\n",
+            "  Running command git clone --filter=blob:none --quiet https://github.com/dlsys10714/mugrade.git /tmp/pip-req-build-vcz6rbdf\n",
+            "  Resolved https://github.com/dlsys10714/mugrade.git to commit 656cdc2b7ad5a37e7a5347a7b0405df0acd72380\n",
+            "  Preparing metadata (setup.py) ... \u001b[?25l\u001b[?25hdone\n",
+            "Building wheels for collected packages: mugrade\n",
+            "  Building wheel for mugrade (setup.py) ... \u001b[?25l\u001b[?25hdone\n",
+            "  Created wheel for mugrade: filename=mugrade-1.2-py3-none-any.whl size=3932 sha256=a8e07ba2687cf0557bde613398df8e11668c702af3234d360916069cac7417d6\n",
+            "  Stored in directory: /tmp/pip-ephem-wheel-cache-aceb5mrz/wheels/8b/ba/3a/621da1207eab160c01968c5e0bd1266f505b9e3f8010376d61\n",
+            "Successfully built mugrade\n",
+            "Installing collected packages: mugrade\n",
+            "Successfully installed mugrade-1.2\n",
+            "/content/drive/Othercomputers/My MacBook Pro/hw3\n",
+            "Collecting pybind11\n",
+            "  Downloading pybind11-2.11.1-py3-none-any.whl (227 kB)\n",
+            "\u001b[2K     \u001b[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\u001b[0m \u001b[32m227.7/227.7 kB\u001b[0m \u001b[31m5.1 MB/s\u001b[0m eta \u001b[36m0:00:00\u001b[0m\n",
+            "\u001b[?25hInstalling collected packages: pybind11\n",
+            "Successfully installed pybind11-2.11.1\n"
+          ]
+        }
+      ],
+      "source": [
+        "# Code to set up the assignment\n",
+        "from google.colab import drive\n",
+        "drive.mount('/content/drive')\n",
+        "# %cd /content/drive/MyDrive/\n",
+        "# !mkdir -p 10714\n",
+        "# %cd /content/drive/MyDrive/10714\n",
+        "# !git clone https://github.com/dlsys10714/hw3.git\n",
+        "# %cd /content/drive/MyDrive/10714/hw3\n",
+        "\n",
+        "!pip3 install --upgrade --no-deps git+https://github.com/dlsys10714/mugrade.git\n",
+        "!ln -s '/content/drive/Othercomputers/My MacBook Pro/hw3' /content/hw3\n",
+        "%cd /content/hw3\n",
+        "\n",
+        "!pip3 install pybind11"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 11,
+      "id": "09eedbc6",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "09eedbc6",
+        "outputId": "8c6b8407-6bd6-4983-ee67-1dc6ff4c5415"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "-- Found pybind11: /usr/local/lib/python3.10/dist-packages/pybind11/include (found version \"2.11.1\")\n",
+            "-- Found cuda, building cuda backend\n",
+            "Wed Dec 13 13:10:51 2023       \n",
+            "+-----------------------------------------------------------------------------+\n",
+            "| NVIDIA-SMI 525.105.17   Driver Version: 525.105.17   CUDA Version: 12.0     |\n",
+            "|-------------------------------+----------------------+----------------------+\n",
+            "| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |\n",
+            "| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |\n",
+            "|                               |                      |               MIG M. |\n",
+            "|===============================+======================+======================|\n",
+            "|   0  Tesla T4            Off  | 00000000:00:04.0 Off |                    0 |\n",
+            "| N/A   43C    P8    12W /  70W |      0MiB / 15360MiB |      0%      Default |\n",
+            "|                               |                      |                  N/A |\n",
+            "+-------------------------------+----------------------+----------------------+\n",
+            "                                                                               \n",
+            "+-----------------------------------------------------------------------------+\n",
+            "| Processes:                                                                  |\n",
+            "|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |\n",
+            "|        ID   ID                                                   Usage      |\n",
+            "|=============================================================================|\n",
+            "|  No running processes found                                                 |\n",
+            "+-----------------------------------------------------------------------------+\n",
+            "-- Autodetected CUDA architecture(s):  7.5\n",
+            "-- Configuring done (0.3s)\n",
+            "-- Generating done (0.2s)\n",
+            "-- Build files have been written to: /content/drive/Othercomputers/My MacBook Pro/hw3/build\n",
+            "make[1]: Entering directory '/content/drive/Othercomputers/My MacBook Pro/hw3/build'\n",
+            "make[2]: Entering directory '/content/drive/Othercomputers/My MacBook Pro/hw3/build'\n",
+            "make[3]: Entering directory '/content/drive/Othercomputers/My MacBook Pro/hw3/build'\n",
+            "make[3]: Leaving directory '/content/drive/Othercomputers/My MacBook Pro/hw3/build'\n",
+            "[  0%] Built target ndarray_backend_cpu\n",
+            "make[3]: Entering directory '/content/drive/Othercomputers/My MacBook Pro/hw3/build'\n",
+            "[ 25%] \u001b[34m\u001b[1mBuilding NVCC (Device) object CMakeFiles/ndarray_backend_cuda.dir/src/ndarray_backend_cuda_generated_ndarray_backend_cuda.cu.o\u001b[0m\n",
+            "make[3]: Leaving directory '/content/drive/Othercomputers/My MacBook Pro/hw3/build'\n",
+            "make[3]: Entering directory '/content/drive/Othercomputers/My MacBook Pro/hw3/build'\n",
+            "[ 50%] \u001b[32m\u001b[1mLinking CXX shared module \"/content/drive/Othercomputers/My MacBook Pro/hw3/python/needle/backend_ndarray/ndarray_backend_cuda.cpython-310-x86_64-linux-gnu.so\"\u001b[0m\n",
+            "make[3]: Leaving directory '/content/drive/Othercomputers/My MacBook Pro/hw3/build'\n",
+            "[ 50%] Built target ndarray_backend_cuda\n",
+            "make[2]: Leaving directory '/content/drive/Othercomputers/My MacBook Pro/hw3/build'\n",
+            "make[1]: Leaving directory '/content/drive/Othercomputers/My MacBook Pro/hw3/build'\n"
+          ]
+        }
+      ],
+      "source": [
+        "# !make clean\n",
+        "!make"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 5,
+      "id": "glK6Q7Ik-2cJ",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "glK6Q7Ik-2cJ",
+        "outputId": "0d2deeee-65fa-443a-dfed-9924ec8e2cb2"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "env: PYTHONPATH=./python\n",
+            "env: NEEDLE_BACKEND=nd\n"
+          ]
+        }
+      ],
+      "source": [
+        "%set_env PYTHONPATH ./python\n",
+        "%set_env NEEDLE_BACKEND nd"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 6,
+      "id": "e7aadcf9",
+      "metadata": {
+        "id": "e7aadcf9"
+      },
+      "outputs": [],
+      "source": [
+        "import sys\n",
+        "sys.path.append('./python')"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "id": "899bc262",
+      "metadata": {
+        "id": "899bc262"
+      },
+      "source": [
+        "## Getting familiar with the NDArray class\n",
+        "\n",
+        "As you get started with this homework, you should first familiarize yourself with the `NDArray.py` class we have provided as a starting point for the assignment.  The code is fairly brief (it's ~500 lines, but a lot of these are comments provided for the functions you'll implement).\n",
+        "\n",
+        "At its core, the NDArray class is a Python wrapper for handling operations on generic n-dimensional arrays.  Recall that virtually any such array will be stored internally as a vector of floating point values, i.e.,\n",
+        "\n",
+        "```c++\n",
+        "float data[size];\n",
+        "```\n",
+        "\n",
+        "and then the actual access to different dimensions of the array are all handled by additional fields (such as the array shape, strides, etc) that indicates how this \"flat\" array maps to n-dimensional structure.  In order to achieve any sort of reasonable speed, the \"raw\" operations (like adding, binary operations, but also more structured operations like matrix multiplication, etc), all need to be written at some level in some native language like C++ (including e.g., making CUDA calls).  But a large number of operations likes transposing, broadcasting, sub-setting of matrices, and other, can all be handled by just adjusting the high-level structure of the array, like it's strides.\n",
+        "\n",
+        "The philosophy behind the NDArray class is that we want _all_ the logic for handling this structure of the array to be written in Python.  Only the \"true\" low level code that actually performs the raw underlying operations on the flat vector (as well as the code to manage these flat vectors, as they might need to e.g., be allocated on GPUs), is written in C++.  The precise nature of this separation will likely start to make more sense to you as you work through the assignment, but generally speaking everything that can be done in Python, is done in Python; often e.g., at the cost of some inefficiencies ... we call `.compact()` (which copies memory) liberally in order to make the underlying C++ implementations simpler.\n",
+        "\n",
+        "In more detail, there are five fields within the NDArray class that you'll need to be familiar with (note that the real class member these all these fields is preceded by an underscore, e.g., `_handle`, `_strides`, etc, some of which are then exposed as a public property ... for all your code it's fine to use the internal, underscored version).\n",
+        "\n",
+        "1. `device` - A object of type `BackendDevice`, which is a simple wrapper that contains a link to the underlying device backend (e.g., CPU or CUDA).\n",
+        "2. `handle` - A class objected that stores the underlying memory of the array.  This is allocated as a class of type `device.Array()`, though this allocation all happens in the provided code (specifically the `NDArray.make` function), and you don't need to worry about calling it yourself.\n",
+        "3. `shape` - A tuple specifying the size of each dimension in the array.\n",
+        "4. `strides` - A tuple specifying the strides of each dimension in the array.\n",
+        "5. `offset` - An integer indicating where in the underlying `device.Array` memory the array actually starts (it's convenient to store this so we can more easily manage pointing back to existing memory, without having to track allocations).\n",
+        "\n",
+        "By manipulating these fields, even pure Python code can perform a lot of the needed operations on the array, such as permuting the dimensions (i.e., transposing), broadcasting, and more.  And then for the raw array manipulation calls, the `device` class has a number of methods (implemented in C++) that contains the necessary implementations.\n",
+        "\n",
+        "There are a few points to note:\n",
+        "\n",
+        "* Internally, the class can use _any_ efficient means of operating on arrays of data as a \"device\" backend.  Even, for example, a numpy array, but where instead of actually using the `numpy.ndarray` to represent the n-dimensional array, we just represent a \"flat\" 1D array in numpy, then call the relevant numpy methods to implement all the needed operators on this raw memory.  This is precisely what we do in the `ndarray_backend_numpy.py` file, which essentially provided a \"stub reference\" that just uses numpy for everything.  You can use this class to help you  better debug your own \"real\" implementations for the \"native\" CPU and GPU backends.\n",
+        "* Of particular importance for many of your Python implementations will be the `NDArray.make` call:\n",
+        "```python\n",
+        "def make(shape, strides=None, device=None, handle=None, offset=0):\n",
+        "```\n",
+        "which creates a new NDArray with the given shape, strides, device, handle, and offset.  If `handle` is not specified (i.e., no pre-existing memory is referenced), then the call will allocate the needed memory, but if handle _is_ specified then no new memory is allocated, but the new NDArray points the same memory as the old one.  It is important to efficient implementations that as many of your functions as possible _don't_ allocate new memory, so you will want to use this call in many cases to accomplish this.\n",
+        "* The NDArray has a `.numpy()` call that converts the array to numpy.  This is _not_ the same as the \"numpy_device\" backend: this creates an actual `numpy.ndarray` that is equivalent to the given NDArray, i.e., the same dimensions, shape, etc, though not necessarily the same strides (Pybind11 will reallocate memory for matrices that are returned in this manner, which can change the striding).\n"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "id": "cc7c24db",
+      "metadata": {
+        "id": "cc7c24db"
+      },
+      "source": [
+        "## Part 1: Python array operations\n",
+        "\n",
+        "As a starting point for your class, implement the following functions in the `ndarray.py` file:\n",
+        "\n",
+        "- `reshape()`\n",
+        "- `permute()`\n",
+        "- `broadcast_to()`\n",
+        "- `__getitem__()`\n",
+        "\n",
+        "The inputs/outputs of these functions are all described in the docstring of the function stub.  It's important to emphasize that _none_ of these functions should reallocate memory, but should instead return NDArrays that share the same memory with `self`, and just use clever manipulation of shape/strides/etc in order to obtain the necessary transformations.\n",
+        "\n",
+        "One thing to note is that the `__getitem__()` call, unlike numpy, will never change the number of dimensions in the array.  So e.g., for a 2D NDArray `A`, `A[2,2]` would return a still-2D with one row and one column.  And e.g. `A[:4,2]` would return a 2D NDarray with 4 rows and 1 column.\n",
+        "\n",
+        "You can rely on the `ndarray_backend_numpy.py` module for all the code in this section.  You can also look at the results of equivalent numpy operations (the test cases should illustrate what these are).\n",
+        "\n",
+        "After implementing these functions, you should pass/submit the following tests.  Note that we test all of these four functions within the test below, and you can incrementally try to pass more tests as you implement each additional function."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 5,
+      "id": "835c3880",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "835c3880",
+        "outputId": "3f564d3d-80bd-4fd8-bb7f-887e66279c71"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "\u001b[1m======================================= test session starts ========================================\u001b[0m\n",
+            "platform linux -- Python 3.10.12, pytest-7.4.3, pluggy-1.3.0 -- /usr/bin/python3\n",
+            "cachedir: .pytest_cache\n",
+            "rootdir: /content/drive/Othercomputers/My MacBook Pro/hw3\n",
+            "plugins: anyio-3.7.1\n",
+            "collected 138 items / 127 deselected / 11 selected                                                 \u001b[0m\n",
+            "\n",
+            "tests/hw3/test_ndarray.py::test_permute[cpu-params0] \u001b[32mPASSED\u001b[0m\u001b[32m                                  [  9%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_permute[cpu-params1] \u001b[32mPASSED\u001b[0m\u001b[32m                                  [ 18%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_permute[cpu-params2] \u001b[32mPASSED\u001b[0m\u001b[32m                                  [ 27%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_reshape[cpu-params0] \u001b[32mPASSED\u001b[0m\u001b[32m                                  [ 36%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_reshape[cpu-params1] \u001b[32mPASSED\u001b[0m\u001b[32m                                  [ 45%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_getitem[cpu-params0] \u001b[32mPASSED\u001b[0m\u001b[32m                                  [ 54%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_getitem[cpu-params1] \u001b[32mPASSED\u001b[0m\u001b[32m                                  [ 63%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_getitem[cpu-params2] \u001b[32mPASSED\u001b[0m\u001b[32m                                  [ 72%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_getitem[cpu-params3] \u001b[32mPASSED\u001b[0m\u001b[32m                                  [ 81%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_getitem[cpu-params4] \u001b[32mPASSED\u001b[0m\u001b[32m                                  [ 90%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_broadcast_to[cpu-params0] \u001b[32mPASSED\u001b[0m\u001b[32m                             [100%]\u001b[0m\n",
+            "\n",
+            "\u001b[32m=============================== \u001b[32m\u001b[1m11 passed\u001b[0m, \u001b[33m127 deselected\u001b[0m\u001b[32m in 10.34s\u001b[0m\u001b[32m ================================\u001b[0m\n"
+          ]
+        }
+      ],
+      "source": [
+        "!python3 -m pytest -v -k \"(permute or reshape or broadcast or getitem) and cpu and not compact\""
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "id": "071b3063",
+      "metadata": {
+        "id": "071b3063"
+      },
+      "outputs": [],
+      "source": [
+        "!python3 -m mugrade submit \"YOUR KEY HERE\" -k \"ndarray_python_ops\""
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "id": "21f48d27",
+      "metadata": {
+        "id": "21f48d27"
+      },
+      "source": [
+        "## Part 2: CPU Backend - Compact and setitem\n",
+        "\n",
+        "Implement the following functions in `ndarray_backend_cpu.cc`:\n",
+        "* `Compact()`\n",
+        "* `EwiseSetitem()`\n",
+        "* `ScalarSetitem()`\n",
+        "\n",
+        "To see why these are all in the same category, let's consider the implementation of the `Compact()` function.  Recall that a matrix is considered compact if it is layed out sequentially in memory in \"row-major\" form (but really a generalization of row-many to higher dimensional arrays), i.e. with the last dimension first, followed by the second to last dimension, etc, all the way to the first.  In our implementation, we also require that the total size of allocated backend array be equal to the size of the array (i.e., the underlying array also can't have any data before or after the array data, which e.g., implies that the `.offset` field equals zero).\n",
+        "\n",
+        "Now let's consider, using a 3D array as a an example, of how a compact call might work.  Here `shape` and `strides` are the shape and strides of the matrix being compacted (i.e., before we have compacted it).\n",
+        "\n",
+        "```c++\n",
+        "cnt = 0;\n",
+        "for (size_t i = 0; i < shape[0]; i++)\n",
+        "    for (size_t j = 0; j < shape[1]; j++)\n",
+        "        for (size_t k = 0; k < shape[2]; k++)\n",
+        "            out[cnt++] = in[strides[0]*i + strides[1]*j + strides[2]*k];\n",
+        "```\n",
+        "In other words, we're converting from a stride-based representation of the matrix to a purely sequential one.\n",
+        "\n",
+        "Now, the challenge in implementing `Compact()` is that you want the method to work for any number of input dimensions.  It's easy to specialize for different fixed-dimension-size arrays, but for a generic implementation, you'll want to think about how to do this same operation where you effectively want a \"variable number of for loops\".  As a hint, one way to do this is to maintain a vector of indices (of size equal to the number of dimensions), and then manually increment them in a loop (including a \"carry\" operation when any of the reaches their maximum size).\n",
+        "\n",
+        "However, if you get really stuck with this, you can alway use the fact that we're probably not going to ask you to deal with matrices of more than 6 dimensions (though we _will_ use 6 dimensions, for the im2col operation we discussed in class).\n",
+        "\n",
+        "\n",
+        "#### The connection to setitem\n",
+        "The setitem functionality, while seemingly quite different, is actually intimately related to `Compact()`.  `__setitem()__` is the Python function called when setting some elements of the object, i.e.,\n",
+        "```python\n",
+        "A[::2,4:5,9] = 0 # or = some_other_array\n",
+        "```\n",
+        "How would you go about implementing this?  In the `__getitem()__` call above, you already implemented a method to take a subset of a matrix without copying (but just modifying strides).  But how would you actually go about _setting_ elements of this array?  In virtually all the other settings in this homework, we call `.compact()` before setting items in an output array, but in this case it doesn't work: calling `.compact()` would copy the subset array to some new memory, but the whole point of the `__setitem__()` call is that we want to modify existing memory.\n",
+        "\n",
+        "If you think about this for a while, you'll realize that the answer looks a lot like `.compact()` but in reverse.  If we want to assign a (itself already compact) right hand side matrix to a `__getitem()__` results, then we need to here like `shape` and `stride` be those fields of the _output_ matrix.  Then we could implement the setitem call as follows\n",
+        "\n",
+        "```c++\n",
+        "cnt = 0;\n",
+        "for (size_t i = 0; i < shape[0]; i++)\n",
+        "    for (size_t j = 0; j < shape[1]; j++)\n",
+        "        for (size_t k = 0; k < shape[2]; k++)\n",
+        "            out[strides[0]*i + strides[1]*j + strides[2]*k] = in[cnt++]; // or \"= val;\"\n",
+        "```\n",
+        "Due to this similarity, if you implement your indexing strategy in a modular fashion, you'll be able to reuse it between the `Compact()` call and the `EwiseSetitem()` and `ScalarSetitem()` calls."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 6,
+      "id": "758969a1",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "758969a1",
+        "outputId": "c46b1e0d-2a4d-410f-d602-3ce455c3a62e"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "\u001b[1m======================================= test session starts ========================================\u001b[0m\n",
+            "platform linux -- Python 3.10.12, pytest-7.4.3, pluggy-1.3.0 -- /usr/bin/python3\n",
+            "cachedir: .pytest_cache\n",
+            "rootdir: /content/drive/Othercomputers/My MacBook Pro/hw3\n",
+            "plugins: anyio-3.7.1\n",
+            "collected 138 items / 123 deselected / 15 selected                                                 \u001b[0m\n",
+            "\n",
+            "tests/hw3/test_ndarray.py::test_compact[cpu-transpose] \u001b[32mPASSED\u001b[0m\u001b[32m                                [  6%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_compact[cpu-broadcast_to] \u001b[32mPASSED\u001b[0m\u001b[32m                             [ 13%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_compact[cpu-reshape1] \u001b[32mPASSED\u001b[0m\u001b[32m                                 [ 20%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_compact[cpu-reshape2] \u001b[32mPASSED\u001b[0m\u001b[32m                                 [ 26%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_compact[cpu-reshape3] \u001b[32mPASSED\u001b[0m\u001b[32m                                 [ 33%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_compact[cpu-getitem1] \u001b[32mPASSED\u001b[0m\u001b[32m                                 [ 40%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_compact[cpu-getitem2] \u001b[32mPASSED\u001b[0m\u001b[32m                                 [ 46%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_compact[cpu-transposegetitem] \u001b[32mPASSED\u001b[0m\u001b[32m                         [ 53%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_setitem_ewise[cpu-params0] \u001b[32mPASSED\u001b[0m\u001b[32m                            [ 60%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_setitem_ewise[cpu-params1] \u001b[32mPASSED\u001b[0m\u001b[32m                            [ 66%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_setitem_ewise[cpu-params2] \u001b[32mPASSED\u001b[0m\u001b[32m                            [ 73%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_setitem_scalar[cpu-params0] \u001b[32mPASSED\u001b[0m\u001b[32m                           [ 80%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_setitem_scalar[cpu-params1] \u001b[32mPASSED\u001b[0m\u001b[32m                           [ 86%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_setitem_scalar[cpu-params2] \u001b[32mPASSED\u001b[0m\u001b[32m                           [ 93%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_setitem_scalar[cpu-params3] \u001b[32mPASSED\u001b[0m\u001b[32m                           [100%]\u001b[0m\n",
+            "\n",
+            "\u001b[32m================================ \u001b[32m\u001b[1m15 passed\u001b[0m, \u001b[33m123 deselected\u001b[0m\u001b[32m in 0.66s\u001b[0m\u001b[32m ================================\u001b[0m\n"
+          ]
+        }
+      ],
+      "source": [
+        "!python3 -m pytest -v -k \"(compact or setitem) and cpu\""
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "id": "74c98f6c",
+      "metadata": {
+        "id": "74c98f6c"
+      },
+      "outputs": [],
+      "source": [
+        "!python3 -m mugrade submit \"YOUR KEY HERE\" -k \"ndarray_cpu_compact_setitem\""
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "id": "9df3e8fb",
+      "metadata": {
+        "id": "9df3e8fb"
+      },
+      "source": [
+        "## Part 3: CPU Backend - Elementwise and scalar operations\n",
+        "\n",
+        "Implement the following functions in `ndarray_backend_cpu.cc`:\n",
+        "\n",
+        "* `EwiseMul()`, `ScalarMul()`\n",
+        "* `EwiseDiv()`, `ScalarDiv()`\n",
+        "* `ScalarPower()`\n",
+        "* `EwiseMaximum()`, `ScalarMaximum()`\n",
+        "* `EwiseEq()`, `ScalarEq()`\n",
+        "* `EwiseGe()`, `ScalarGe()`\n",
+        "* `EwiseLog()`\n",
+        "* `EwiseExp()`\n",
+        "* `EwiseTanh()`\n",
+        "\n",
+        "You can look at the included\n",
+        "`EwiseAdd()` and `ScalarAdd()` functions (plus the invocations from `NDArray` in order to understand the required format of these functions.\n",
+        "\n",
+        "Note that unlike the remaining functions mentioned here, we do not include function stubs for each of these functions.  This is because, while you can implement these naively just through implementing each function separately, though this will end up with a lot of duplicated code.  You're welcome to use e.g., C++ templates or macros to address this problem (but these would only be exposed internally, not to the external interface).\n",
+        "\n",
+        "**Note**: Remember to register functions  in the pybind module after finishing your implementations."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "id": "22943d08",
+      "metadata": {
+        "id": "22943d08",
+        "outputId": "b64f72f3-db81-40f9-a0a2-8991b5c0d482"
+      },
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "\u001b[1m============================= test session starts ==============================\u001b[0m\n",
+            "platform darwin -- Python 3.10.9, pytest-7.1.2, pluggy-1.0.0 -- /Users/jiahuiwu/anaconda3/bin/python3\n",
+            "cachedir: .pytest_cache\n",
+            "rootdir: /Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw3\n",
+            "plugins: anyio-3.5.0\n",
+            "collected 138 items / 115 deselected / 23 selected                             \u001b[0m\u001b[1m\n",
+            "\n",
+            "tests/hw3/test_ndarray.py::test_ewise_fn[cpu-shape0-multiply] \u001b[32mPASSED\u001b[0m\u001b[32m     [  4%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_ewise_fn[cpu-shape0-divide] \u001b[32mPASSED\u001b[0m\u001b[32m       [  8%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_ewise_fn[cpu-shape0-add] \u001b[32mPASSED\u001b[0m\u001b[32m          [ 13%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_ewise_fn[cpu-shape0-subtract] \u001b[32mPASSED\u001b[0m\u001b[32m     [ 17%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_ewise_fn[cpu-shape0-equal] \u001b[32mPASSED\u001b[0m\u001b[32m        [ 21%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_ewise_fn[cpu-shape0-greater_than] \u001b[32mPASSED\u001b[0m\u001b[32m [ 26%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_ewise_fn[cpu-shape1-multiply] \u001b[32mPASSED\u001b[0m\u001b[32m     [ 30%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_ewise_fn[cpu-shape1-divide] \u001b[32mPASSED\u001b[0m\u001b[32m       [ 34%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_ewise_fn[cpu-shape1-add] \u001b[32mPASSED\u001b[0m\u001b[32m          [ 39%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_ewise_fn[cpu-shape1-subtract] \u001b[32mPASSED\u001b[0m\u001b[32m     [ 43%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_ewise_fn[cpu-shape1-equal] \u001b[32mPASSED\u001b[0m\u001b[32m        [ 47%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_ewise_fn[cpu-shape1-greater_than] \u001b[32mPASSED\u001b[0m\u001b[32m [ 52%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_ewise_max[cpu-shape0] \u001b[32mPASSED\u001b[0m\u001b[32m             [ 56%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_ewise_max[cpu-shape1] \u001b[32mPASSED\u001b[0m\u001b[32m             [ 60%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_scalar_mul[cpu] \u001b[32mPASSED\u001b[0m\u001b[32m                   [ 65%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_scalar_div[cpu] \u001b[32mPASSED\u001b[0m\u001b[32m                   [ 69%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_scalar_power[cpu] \u001b[32mPASSED\u001b[0m\u001b[32m                 [ 73%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_scalar_maximum[cpu] \u001b[32mPASSED\u001b[0m\u001b[32m               [ 78%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_scalar_eq[cpu] \u001b[32mPASSED\u001b[0m\u001b[32m                    [ 82%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_scalar_ge[cpu] \u001b[32mPASSED\u001b[0m\u001b[32m                    [ 86%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_ewise_log[cpu] \u001b[32mPASSED\u001b[0m\u001b[32m                    [ 91%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_ewise_exp[cpu] \u001b[32mPASSED\u001b[0m\u001b[32m                    [ 95%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_ewise_tanh[cpu] \u001b[32mPASSED\u001b[0m\u001b[32m                   [100%]\u001b[0m\n",
+            "\n",
+            "\u001b[32m====================== \u001b[32m\u001b[1m23 passed\u001b[0m, \u001b[33m115 deselected\u001b[0m\u001b[32m in 1.17s\u001b[0m\u001b[32m ======================\u001b[0m\n"
+          ]
+        }
+      ],
+      "source": [
+        "!python3 -m pytest -v -k \"(ewise_fn or ewise_max or log or exp or tanh or (scalar and not setitem)) and cpu\""
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "id": "fddba8d9",
+      "metadata": {
+        "id": "fddba8d9"
+      },
+      "outputs": [],
+      "source": [
+        "!python3 -m mugrade submit \"YOUR KEY HERE\" -k \"ndarray_cpu_ops\""
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "id": "7be9fe7c",
+      "metadata": {
+        "id": "7be9fe7c"
+      },
+      "source": [
+        "## Part 4: CPU Backend - Reductions\n",
+        "\n",
+        "\n",
+        "Implement the following functions in `ndarray_backend_cpu.cc`:\n",
+        "\n",
+        "* `ReduceMax()`\n",
+        "* `ReduceSum()`\n",
+        "\n",
+        "In general, the reduction functions `.max()` and `.sum()` in NDArray take the max or sum across a specified axis specified by the `axis` argument (or across the entire array when `axis=None`); note that we don't support axis being a set of axes, though this wouldn't be too hard to add if you desired (but it's not in the interface you should implement for the homework).\n",
+        "\n",
+        "Because summing over individual axes can be a bit tricky, even for compact arrays, these functions (in Python) in Python simplify things by permuting the last axis to the be the one reduced over (this is what the `reduce_view_out()` function in NDArray does), then compacting the array.  So for your `ReduceMax()` and `ReduceSum()` functions you implement in C++, you can assume that both the input and output arrays are contiguous in memory, and you want to just reduce over contiguous elements of size `reduce_size` as passed to the C++ functions."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "id": "de5382b3",
+      "metadata": {
+        "id": "de5382b3",
+        "outputId": "c7e1e12c-c816-4eac-90ca-36c72d1516dc"
+      },
+      "outputs": [
+        {
+          "name": "stdout",
+          "output_type": "stream",
+          "text": [
+            "\u001b[1m============================= test session starts ==============================\u001b[0m\n",
+            "platform darwin -- Python 3.10.9, pytest-7.1.2, pluggy-1.0.0 -- /Users/jiahuiwu/anaconda3/bin/python3\n",
+            "cachedir: .pytest_cache\n",
+            "rootdir: /Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw3\n",
+            "plugins: anyio-3.5.0\n",
+            "collected 138 items / 130 deselected / 8 selected                              \u001b[0m\n",
+            "\n",
+            "tests/hw3/test_ndarray.py::test_reduce_sum[params0-cpu] \u001b[32mPASSED\u001b[0m\u001b[32m           [ 12%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_reduce_sum[params1-cpu] \u001b[32mPASSED\u001b[0m\u001b[32m           [ 25%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_reduce_sum[params2-cpu] \u001b[32mPASSED\u001b[0m\u001b[32m           [ 37%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_reduce_sum[params3-cpu] \u001b[32mPASSED\u001b[0m\u001b[32m           [ 50%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_reduce_max[params0-cpu] \u001b[32mPASSED\u001b[0m\u001b[32m           [ 62%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_reduce_max[params1-cpu] \u001b[32mPASSED\u001b[0m\u001b[32m           [ 75%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_reduce_max[params2-cpu] \u001b[32mPASSED\u001b[0m\u001b[32m           [ 87%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_reduce_max[params3-cpu] \u001b[32mPASSED\u001b[0m\u001b[32m           [100%]\u001b[0m\n",
+            "\n",
+            "\u001b[32m====================== \u001b[32m\u001b[1m8 passed\u001b[0m, \u001b[33m130 deselected\u001b[0m\u001b[32m in 0.25s\u001b[0m\u001b[32m =======================\u001b[0m\n"
+          ]
+        }
+      ],
+      "source": [
+        "!python3 -m pytest -v -k \"reduce and cpu\""
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "id": "a1f1f484",
+      "metadata": {
+        "id": "a1f1f484"
+      },
+      "outputs": [],
+      "source": [
+        "!python3 -m mugrade submit \"YOUR KEY HERE\" -k \"ndarray_cpu_reductions\""
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "id": "35e1e9c0",
+      "metadata": {
+        "id": "35e1e9c0"
+      },
+      "source": [
+        "## Part 5: CPU Backend - Matrix multiplication\n",
+        "\n",
+        "Implement the following functions in `ndarray_backend_cpu.cc`:\n",
+        "\n",
+        "* `Matmul()`\n",
+        "* `MatmulTiled()`\n",
+        "* `AlignedDot()`\n",
+        "\n",
+        "The first implementation, `Matmul()` can use the naive three-nested-for-loops algorithm for matrix multiplication.  However, the `MatmulTiled()` performs the same matrix multiplication on memory laid out in tiled form, i.e., as a contiguous 4D array\n",
+        "```c++\n",
+        "float[M/TILE][N/TILE][TILE][TILE];\n",
+        "```\n",
+        "Note that the Python `__matmul__` code already does the conversion to tiled form when all sizes of the matrix multiplication are divisible by `TILE`, so your code just needs to implement the multiplication in this form.  In order to make the methods efficient, you will want to make use of (after you implement it), the `AlignedDot()` function, which will enable the compiler to efficiently make use of vector operations and proper caching.  The output matrix will also be in the tiled form above, and the Python backend will take care of the conversion to a normal 2D array.\n",
+        "\n",
+        "Note that in order to get the most speedup possible from you tiled version, you may want to use the clang compiler with colab instead of gcc.  To do this, run the following command before building your code."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 7,
+      "id": "28771449",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "28771449",
+        "outputId": "0d748bfd-530c-4690-c74f-d43a229b4bf1"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "\u001b[1m======================================= test session starts ========================================\u001b[0m\n",
+            "platform linux -- Python 3.10.12, pytest-7.4.3, pluggy-1.3.0 -- /usr/bin/python3\n",
+            "cachedir: .pytest_cache\n",
+            "rootdir: /content/drive/Othercomputers/My MacBook Pro/hw3\n",
+            "plugins: anyio-3.7.1\n",
+            "collected 138 items / 128 deselected / 10 selected                                                 \u001b[0m\n",
+            "\n",
+            "tests/hw3/test_ndarray.py::test_matmul[16-16-16-cpu] \u001b[32mPASSED\u001b[0m\u001b[32m                                  [ 10%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_matmul[8-8-8-cpu] \u001b[32mPASSED\u001b[0m\u001b[32m                                     [ 20%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_matmul[1-2-3-cpu] \u001b[32mPASSED\u001b[0m\u001b[32m                                     [ 30%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_matmul[3-4-5-cpu] \u001b[32mPASSED\u001b[0m\u001b[32m                                     [ 40%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_matmul[5-4-3-cpu] \u001b[32mPASSED\u001b[0m\u001b[32m                                     [ 50%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_matmul[64-64-64-cpu] \u001b[32mPASSED\u001b[0m\u001b[32m                                  [ 60%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_matmul[72-72-72-cpu] \u001b[32mPASSED\u001b[0m\u001b[32m                                  [ 70%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_matmul[72-73-74-cpu] \u001b[32mPASSED\u001b[0m\u001b[32m                                  [ 80%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_matmul[74-73-72-cpu] \u001b[32mPASSED\u001b[0m\u001b[32m                                  [ 90%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_matmul[128-128-128-cpu] \u001b[32mPASSED\u001b[0m\u001b[32m                               [100%]\u001b[0m\n",
+            "\n",
+            "\u001b[32m================================ \u001b[32m\u001b[1m10 passed\u001b[0m, \u001b[33m128 deselected\u001b[0m\u001b[32m in 0.83s\u001b[0m\u001b[32m ================================\u001b[0m\n"
+          ]
+        }
+      ],
+      "source": [
+        "!python3 -m pytest -v -k \"matmul and cpu\""
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "id": "5e0a7443",
+      "metadata": {
+        "id": "5e0a7443"
+      },
+      "outputs": [],
+      "source": [
+        "!python3 -m mugrade submit \"YOUR KEY HERE\" -k \"ndarray_cpu_matmul\""
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "id": "0d3e131e",
+      "metadata": {
+        "id": "0d3e131e"
+      },
+      "outputs": [],
+      "source": [
+        "!export CXX=/usr/bin/clang++ && make"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "id": "c44486db",
+      "metadata": {
+        "id": "c44486db"
+      },
+      "source": [
+        "## Part 6: CUDA Backend - Compact and setitem\n",
+        "\n",
+        "Implement the following functions in `ndarray_backend_cuda.cu`:\n",
+        "* `Compact()`\n",
+        "* `EwiseSetitem()`\n",
+        "* `ScalarSetitem()`\n",
+        "\n",
+        "\n",
+        "For this portion, you'll implement the compact and setitem calls in the CUDA backend.  This is fairly similar to the C++ version, however, depending on how you implemented that function, there could also be some substantial differences.  We specifically want to highlight a few differences between the C++ and the CUDA implementations, however.\n",
+        "\n",
+        "First, as with the example functions implemented in the CUDA backend code, for all the functions above you will actually want to implement two functions: the basic functions listed above that you will call from Python, and the corresponding CUDA kernels that will actually perform the computation.  For the most part, we only provide the prototype for the \"base\" function in the `ndarray_backend_cuda.cu` file, and you will need to define and implement the kernel function yourself.  However, to see how these work, for the `Compact()` call we are providing you with the _complete_ `Compact()` call, and the function prototype for the `CompactKernel()` call.\n",
+        "\n",
+        "One thing you may notice is the seemingly odd use of a `CudaVec` struct, which is a struct used to pass shape/stride parameters.  In the C++ version we used the STL `std::vector` variables to store these inputs (and the same is done in the base `Compact()` call, but CUDA kernels cannot operation on STL vectors, so something else is needed).  Furthermore, although we _could_ convert the vectors to normal CUDA arrays, this would be rather cumbersome, as we would need to call `cudaMalloc()`, pass the parameters as integer pointers, then free them after the calls.  Of course such memory management is needed for the actual underlying data in the array, but it seems like overkill to do it for just passing a variable-sized small tuple of shape/stride values.  The solution is to create a struct that has a \"maximize\" size for the number of dimensions an array can have, and then just store the actual shape/stride data in the first entries of these fields.  This is all done by the included `CudaVec` struct and `VecToCuda()` function, and you can just use these as provided for all the CUDA kernels that require passing shape/strides to the kernel itself.\n",
+        "\n",
+        "The other (more conceptual) big difference between the C++ and CUDA implementations of `Compact()` is that in C++ you will typically loop over the elements of the non-compact array sequentially, which allows you to perform some optimizations with respect to computing the corresponding indices between the compact and non-compact arrays.  In CUDA, you cannot do this, and will need to implement code that can directly map from an index in the compact array to one in the strided array.\n",
+        "\n",
+        "As before, we recommend you implement your code in such as way that it can easily be re-used between the `Compact()`, and `Setitem()` calls.  As a short note, remember that if you want to call a (separate, non-kernel) function from kernel code, you need to define it as a `__device__` function.\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 8,
+      "id": "480d127f",
+      "metadata": {
+        "id": "480d127f",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "28b3bbc8-9d35-443b-eb7e-222c96325fdb"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "\u001b[1m======================================= test session starts ========================================\u001b[0m\n",
+            "platform linux -- Python 3.10.12, pytest-7.4.3, pluggy-1.3.0 -- /usr/bin/python3\n",
+            "cachedir: .pytest_cache\n",
+            "rootdir: /content/drive/Othercomputers/My MacBook Pro/hw3\n",
+            "plugins: anyio-3.7.1\n",
+            "collected 138 items / 123 deselected / 15 selected                                                 \u001b[0m\n",
+            "\n",
+            "tests/hw3/test_ndarray.py::test_compact[cuda-transpose] \u001b[32mPASSED\u001b[0m\u001b[32m                               [  6%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_compact[cuda-broadcast_to] \u001b[32mPASSED\u001b[0m\u001b[32m                            [ 13%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_compact[cuda-reshape1] \u001b[32mPASSED\u001b[0m\u001b[32m                                [ 20%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_compact[cuda-reshape2] \u001b[32mPASSED\u001b[0m\u001b[32m                                [ 26%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_compact[cuda-reshape3] \u001b[32mPASSED\u001b[0m\u001b[32m                                [ 33%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_compact[cuda-getitem1] \u001b[32mPASSED\u001b[0m\u001b[32m                                [ 40%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_compact[cuda-getitem2] \u001b[32mPASSED\u001b[0m\u001b[32m                                [ 46%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_compact[cuda-transposegetitem] \u001b[32mPASSED\u001b[0m\u001b[32m                        [ 53%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_setitem_ewise[cuda-params0] \u001b[32mPASSED\u001b[0m\u001b[32m                           [ 60%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_setitem_ewise[cuda-params1] \u001b[32mPASSED\u001b[0m\u001b[32m                           [ 66%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_setitem_ewise[cuda-params2] \u001b[32mPASSED\u001b[0m\u001b[32m                           [ 73%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_setitem_scalar[cuda-params0] \u001b[32mPASSED\u001b[0m\u001b[32m                          [ 80%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_setitem_scalar[cuda-params1] \u001b[32mPASSED\u001b[0m\u001b[32m                          [ 86%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_setitem_scalar[cuda-params2] \u001b[32mPASSED\u001b[0m\u001b[32m                          [ 93%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_setitem_scalar[cuda-params3] \u001b[32mPASSED\u001b[0m\u001b[32m                          [100%]\u001b[0m\n",
+            "\n",
+            "\u001b[32m================================ \u001b[32m\u001b[1m15 passed\u001b[0m, \u001b[33m123 deselected\u001b[0m\u001b[32m in 8.35s\u001b[0m\u001b[32m ================================\u001b[0m\n"
+          ]
+        }
+      ],
+      "source": [
+        "!python3 -m pytest -v -k \"(compact or setitem) and cuda\""
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "id": "98a83634",
+      "metadata": {
+        "id": "98a83634"
+      },
+      "outputs": [],
+      "source": [
+        "!python3 -m mugrade submit \"YOUR KEY HERE\" -k \"ndarray_cuda_compact_setitem\""
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "id": "7aa2a94a",
+      "metadata": {
+        "id": "7aa2a94a"
+      },
+      "source": [
+        "## Part 7: CUDA Backend - Elementwise and scalar operations\n",
+        "\n",
+        "Implement the following functions in `ndarray_backend_cuda.cu`:\n",
+        "\n",
+        "* `EwiseMul()`, `ScalarMul()`\n",
+        "* `EwiseDiv()`, `ScalarDiv()`\n",
+        "* `ScalarPower()`\n",
+        "* `EwiseMaximum()`, `ScalarMaximum()`\n",
+        "* `EwiseEq()`, `ScalarEq()`\n",
+        "* `EwiseGe()`, `ScalarGe()`\n",
+        "* `EwiseLog()`\n",
+        "* `EwiseExp()`\n",
+        "* `EwiseTanh()`\n",
+        "\n",
+        "Again, we don't provide these function prototypes, and you're welcome to use C++ templates or macros to make this implementation more compact.  You will also want to uncomment the appropriate regions of the Pybind11 code once you've implemented each function."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 9,
+      "id": "ee2d6dd8",
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "ee2d6dd8",
+        "outputId": "099fb9e2-ff8b-43e6-f616-8fd92b63682d"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "\u001b[1m======================================= test session starts ========================================\u001b[0m\n",
+            "platform linux -- Python 3.10.12, pytest-7.4.3, pluggy-1.3.0 -- /usr/bin/python3\n",
+            "cachedir: .pytest_cache\n",
+            "rootdir: /content/drive/Othercomputers/My MacBook Pro/hw3\n",
+            "plugins: anyio-3.7.1\n",
+            "collected 138 items / 115 deselected / 23 selected                                                 \u001b[0m\n",
+            "\n",
+            "tests/hw3/test_ndarray.py::test_ewise_fn[cuda-shape0-multiply] \u001b[32mPASSED\u001b[0m\u001b[32m                        [  4%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_ewise_fn[cuda-shape0-divide] \u001b[32mPASSED\u001b[0m\u001b[32m                          [  8%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_ewise_fn[cuda-shape0-add] \u001b[32mPASSED\u001b[0m\u001b[32m                             [ 13%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_ewise_fn[cuda-shape0-subtract] \u001b[32mPASSED\u001b[0m\u001b[32m                        [ 17%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_ewise_fn[cuda-shape0-equal] \u001b[32mPASSED\u001b[0m\u001b[32m                           [ 21%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_ewise_fn[cuda-shape0-greater_than] \u001b[32mPASSED\u001b[0m\u001b[32m                    [ 26%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_ewise_fn[cuda-shape1-multiply] \u001b[32mPASSED\u001b[0m\u001b[32m                        [ 30%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_ewise_fn[cuda-shape1-divide] \u001b[32mPASSED\u001b[0m\u001b[32m                          [ 34%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_ewise_fn[cuda-shape1-add] \u001b[32mPASSED\u001b[0m\u001b[32m                             [ 39%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_ewise_fn[cuda-shape1-subtract] \u001b[32mPASSED\u001b[0m\u001b[32m                        [ 43%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_ewise_fn[cuda-shape1-equal] \u001b[32mPASSED\u001b[0m\u001b[32m                           [ 47%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_ewise_fn[cuda-shape1-greater_than] \u001b[32mPASSED\u001b[0m\u001b[32m                    [ 52%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_ewise_max[cuda-shape0] \u001b[32mPASSED\u001b[0m\u001b[32m                                [ 56%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_ewise_max[cuda-shape1] \u001b[32mPASSED\u001b[0m\u001b[32m                                [ 60%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_scalar_mul[cuda] \u001b[32mPASSED\u001b[0m\u001b[32m                                      [ 65%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_scalar_div[cuda] \u001b[32mPASSED\u001b[0m\u001b[32m                                      [ 69%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_scalar_power[cuda] \u001b[32mPASSED\u001b[0m\u001b[32m                                    [ 73%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_scalar_maximum[cuda] \u001b[32mPASSED\u001b[0m\u001b[32m                                  [ 78%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_scalar_eq[cuda] \u001b[32mPASSED\u001b[0m\u001b[32m                                       [ 82%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_scalar_ge[cuda] \u001b[32mPASSED\u001b[0m\u001b[32m                                       [ 86%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_ewise_log[cuda] \u001b[32mPASSED\u001b[0m\u001b[32m                                       [ 91%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_ewise_exp[cuda] \u001b[32mPASSED\u001b[0m\u001b[32m                                       [ 95%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_ewise_tanh[cuda] \u001b[32mPASSED\u001b[0m\u001b[32m                                      [100%]\u001b[0m\n",
+            "\n",
+            "\u001b[32m================================ \u001b[32m\u001b[1m23 passed\u001b[0m, \u001b[33m115 deselected\u001b[0m\u001b[32m in 0.81s\u001b[0m\u001b[32m ================================\u001b[0m\n"
+          ]
+        }
+      ],
+      "source": [
+        "!python3 -m pytest -v -k \"(ewise_fn or ewise_max or log or exp or tanh or (scalar and not setitem)) and cuda\""
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "id": "db80e3fa",
+      "metadata": {
+        "id": "db80e3fa"
+      },
+      "outputs": [],
+      "source": [
+        "!python3 -m mugrade submit \"YOUR KEY HERE\" -k \"ndarray_cuda_ops\""
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "id": "9b7de79b",
+      "metadata": {
+        "id": "9b7de79b"
+      },
+      "source": [
+        "## Part 8: CUDA Backend - Reductions\n",
+        "\n",
+        "\n",
+        "Implement the following functions in `ndarray_backend_cuda.cu`:\n",
+        "\n",
+        "* `ReduceMax()`\n",
+        "* `ReduceSum()`\n",
+        "\n",
+        "You can take a fairly simplistic approach here, and just use a separate CUDA thread for each individual reduction item: i.e., if there is a 100 x 20 array you are reducing over the second dimension, you could have 100 threads, each of which individually processed its own 20-dimensional array..  This is particularly inefficient for the `.max(axis=None)` calls, but we won't worry about this for the time being.  If you want a more industrial-grade implementation, you use a hierarchical mechanism that first aggregated across some smaller span, then had a secondary function that aggregated across _these_ reduced arrays, etc.  But this is not needed to pass the tests."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 14,
+      "id": "10239c84",
+      "metadata": {
+        "id": "10239c84",
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "outputId": "8a0d653a-2026-4d1d-ef1d-2c7fbda712ab"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "\u001b[1m======================================= test session starts ========================================\u001b[0m\n",
+            "platform linux -- Python 3.10.12, pytest-7.4.3, pluggy-1.3.0 -- /usr/bin/python3\n",
+            "cachedir: .pytest_cache\n",
+            "rootdir: /content/drive/Othercomputers/My MacBook Pro/hw3\n",
+            "plugins: anyio-3.7.1\n",
+            "collected 138 items / 130 deselected / 8 selected                                                  \u001b[0m\n",
+            "\n",
+            "tests/hw3/test_ndarray.py::test_reduce_sum[params0-cuda] \u001b[32mPASSED\u001b[0m\u001b[32m                              [ 12%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_reduce_sum[params1-cuda] \u001b[32mPASSED\u001b[0m\u001b[32m                              [ 25%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_reduce_sum[params2-cuda] \u001b[32mPASSED\u001b[0m\u001b[32m                              [ 37%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_reduce_sum[params3-cuda] \u001b[32mPASSED\u001b[0m\u001b[32m                              [ 50%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_reduce_max[params0-cuda] \u001b[32mPASSED\u001b[0m\u001b[32m                              [ 62%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_reduce_max[params1-cuda] \u001b[32mPASSED\u001b[0m\u001b[32m                              [ 75%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_reduce_max[params2-cuda] \u001b[32mPASSED\u001b[0m\u001b[32m                              [ 87%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_reduce_max[params3-cuda] \u001b[32mPASSED\u001b[0m\u001b[32m                              [100%]\u001b[0m\n",
+            "\n",
+            "\u001b[32m================================ \u001b[32m\u001b[1m8 passed\u001b[0m, \u001b[33m130 deselected\u001b[0m\u001b[32m in 0.63s\u001b[0m\u001b[32m =================================\u001b[0m\n"
+          ]
+        }
+      ],
+      "source": [
+        "!python3 -m pytest -v -k \"reduce and cuda\""
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "id": "0f75df69",
+      "metadata": {
+        "id": "0f75df69"
+      },
+      "outputs": [],
+      "source": [
+        "!python3 -m mugrade submit \"YOUR KEY HERE\" -k \"ndarray_cuda_reductions\""
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "id": "01027bb7",
+      "metadata": {
+        "id": "01027bb7"
+      },
+      "source": [
+        "## Part 9: CUDA Backend - Matrix multiplication\n",
+        "\n",
+        "Implement the following functions in `ndarray_backend_cuda.cu`:\n",
+        "\n",
+        "* `Matmul()`\n",
+        "\n",
+        "Finally, as your final exercise, you'll implement matrix multiplication on the GPU.  Your implementation here can roughly follow the presentation in class.  While you can pass the tests using fairly naive code here (i.e., you could just have a separate thread for each (i,j) location in the matrix, doing the matrix multiplication efficiently (to make it actually faster than a CPU version) requires cooperative fetching and the block shared memory register tiling covered in class.  Try to implement using these methods, and see how much faster you can get your code than the C++ (or numpy) backends.\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!python3 -m pytest -v -k \"matmul and cuda\""
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "wnKO_gv14T4j",
+        "outputId": "6ed5d49b-43ec-4ca3-adee-34ac655b083b"
+      },
+      "id": "wnKO_gv14T4j",
+      "execution_count": 12,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "\u001b[1m======================================= test session starts ========================================\u001b[0m\n",
+            "platform linux -- Python 3.10.12, pytest-7.4.3, pluggy-1.3.0 -- /usr/bin/python3\n",
+            "cachedir: .pytest_cache\n",
+            "rootdir: /content/drive/Othercomputers/My MacBook Pro/hw3\n",
+            "plugins: anyio-3.7.1\n",
+            "collected 138 items / 128 deselected / 10 selected                                                 \u001b[0m\n",
+            "\n",
+            "tests/hw3/test_ndarray.py::test_matmul[16-16-16-cuda] \u001b[32mPASSED\u001b[0m\u001b[32m                                 [ 10%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_matmul[8-8-8-cuda] \u001b[32mPASSED\u001b[0m\u001b[32m                                    [ 20%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_matmul[1-2-3-cuda] \u001b[32mPASSED\u001b[0m\u001b[32m                                    [ 30%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_matmul[3-4-5-cuda] \u001b[32mPASSED\u001b[0m\u001b[32m                                    [ 40%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_matmul[5-4-3-cuda] \u001b[32mPASSED\u001b[0m\u001b[32m                                    [ 50%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_matmul[64-64-64-cuda] \u001b[32mPASSED\u001b[0m\u001b[32m                                 [ 60%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_matmul[72-72-72-cuda] \u001b[32mPASSED\u001b[0m\u001b[32m                                 [ 70%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_matmul[72-73-74-cuda] \u001b[32mPASSED\u001b[0m\u001b[32m                                 [ 80%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_matmul[74-73-72-cuda] \u001b[32mPASSED\u001b[0m\u001b[32m                                 [ 90%]\u001b[0m\n",
+            "tests/hw3/test_ndarray.py::test_matmul[128-128-128-cuda] \u001b[32mPASSED\u001b[0m\u001b[32m                              [100%]\u001b[0m\n",
+            "\n",
+            "\u001b[32m================================ \u001b[32m\u001b[1m10 passed\u001b[0m, \u001b[33m128 deselected\u001b[0m\u001b[32m in 0.55s\u001b[0m\u001b[32m ================================\u001b[0m\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "id": "3ae22cf2",
+      "metadata": {
+        "id": "3ae22cf2"
+      },
+      "outputs": [],
+      "source": [
+        "!python3 -m mugrade submit \"YOUR KEY HERE\" -k \"ndarray_cuda_matmul\""
+      ]
+    }
+  ],
+  "metadata": {
+    "accelerator": "GPU",
+    "colab": {
+      "provenance": []
+    },
+    "kernelspec": {
+      "display_name": "Python 3.8.10 64-bit",
+      "language": "python",
+      "name": "python3"
+    },
+    "language_info": {
+      "codemirror_mode": {
+        "name": "ipython",
+        "version": 3
+      },
+      "file_extension": ".py",
+      "mimetype": "text/x-python",
+      "name": "python",
+      "nbconvert_exporter": "python",
+      "pygments_lexer": "ipython3",
+      "version": "3.10.9"
+    },
+    "vscode": {
+      "interpreter": {
+        "hash": "916dbcbb3f70747c44a77c7bcd40155683ae19c65e1c03b4aa3499c5328201f1"
+      }
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}
