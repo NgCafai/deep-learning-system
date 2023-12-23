@@ -1,0 +1,4 @@
+**/.git/
+**/__pycache__/
+hw4/data/cifar-10-batches-py/
+hw4/data/ptb/

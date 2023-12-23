@@ -1,0 +1,3 @@
+/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/ndarray_backend_cpu.dir
+/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/edit_cache.dir
+/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/rebuild_cache.dir

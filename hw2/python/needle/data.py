@@ -116,9 +116,9 @@ class DataLoader:
         if self.batch_idx >= len(self.ordering):
             raise StopIteration
         batch_indices = self.ordering[self.batch_idx]
-        batch = self.dataset[batch_indices]
+        X_batch, y_batch = self.dataset[batch_indices]
         self.batch_idx += 1
-        return [Tensor(x) for x in batch]
+        return Tensor(X_batch), Tensor(y_batch)
 
 
 class MNISTDataset(Dataset):

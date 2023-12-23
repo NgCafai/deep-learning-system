@@ -213,26 +213,27 @@ class MatMul(TensorOp):
         return array_api.matmul(a, b)
 
     def gradient(self, out_grad, node):
-        A, B = node.inputs
-
-        # Gradient with respect to A is out_grad * B^T
-        grad_A = out_grad @ B.transpose()
-
-        # Gradient with respect to B is A^T * out_grad
-        grad_B = A.transpose() @ out_grad
-
         lhs, rhs = node.inputs
+        # Gradient with respect to A is out_grad * B^T
         grad_A = matmul(out_grad, transpose(rhs))
+        # Gradient with respect to B is A^T * out_grad
         grad_B = matmul(transpose(lhs), out_grad)
+
+        # Adjust the shape of the gradients if necessary.
+        # For example, if lhs.shape is (5, 4), and rhs.shape is (6, 6, 4, 3)
+        # then out_grad.shape is (6, 6, 5, 3),
+        # and now grad_A.shape is (6, 6, 5, 4) and grad_B.shape is (6, 6, 4, 3).
+        # So we need to sum over the first two axes of grad_A.
         if grad_A.shape != lhs.shape:
-            grad_A = summation(grad_A, tuple(range(len(grad_A.shape) - len(lhs.shape))))
+            grad_A = summation(grad_A, tuple(
+                range(len(grad_A.shape) - len(lhs.shape))))
         if grad_B.shape != rhs.shape:
-            grad_B = summation(grad_B, tuple(range(len(grad_B.shape) - len(rhs.shape))))
+            grad_B = summation(grad_B, tuple(
+                range(len(grad_B.shape) - len(rhs.shape))))
         assert (grad_A.shape == lhs.shape)
         assert (grad_B.shape == rhs.shape)
 
         return grad_A, grad_B
-
 
 
 def matmul(a, b):

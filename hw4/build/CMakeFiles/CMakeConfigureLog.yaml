@@ -1,0 +1,506 @@
+
+---
+events:
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/Applications/CMake.app/Contents/share/cmake-3.28/Modules/CMakeDetermineSystem.cmake:233 (message)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      The system is: Darwin - 22.4.0 - x86_64
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/Applications/CMake.app/Contents/share/cmake-3.28/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/Applications/CMake.app/Contents/share/cmake-3.28/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/Applications/CMake.app/Contents/share/cmake-3.28/Modules/CMakeDetermineCCompiler.cmake:123 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Compiling the C compiler identification source file "CMakeCCompilerId.c" failed.
+      Compiler: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc 
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      1
+      ld: library not found for -lSystem
+      clang: error: linker command failed with exit code 1 (use -v to see invocation)
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/Applications/CMake.app/Contents/share/cmake-3.28/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/Applications/CMake.app/Contents/share/cmake-3.28/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/Applications/CMake.app/Contents/share/cmake-3.28/Modules/CMakeDetermineCCompiler.cmake:123 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
+      Compiler: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc 
+      Build flags: 
+      Id flags: -c 
+      
+      The output was:
+      0
+      
+      
+      Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CMakeCCompilerId.o"
+      
+      The C compiler identification is AppleClang, found in:
+        /Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/3.28.0/CompilerIdC/CMakeCCompilerId.o
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/Applications/CMake.app/Contents/share/cmake-3.28/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/Applications/CMake.app/Contents/share/cmake-3.28/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/Applications/CMake.app/Contents/share/cmake-3.28/Modules/CMakeDetermineCXXCompiler.cmake:126 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" failed.
+      Compiler: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ 
+      Build flags: 
+      Id flags:  
+      
+      The output was:
+      1
+      ld: library not found for -lc++
+      clang: error: linker command failed with exit code 1 (use -v to see invocation)
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/Applications/CMake.app/Contents/share/cmake-3.28/Modules/CMakeDetermineCompilerId.cmake:17 (message)"
+      - "/Applications/CMake.app/Contents/share/cmake-3.28/Modules/CMakeDetermineCompilerId.cmake:64 (__determine_compiler_id_test)"
+      - "/Applications/CMake.app/Contents/share/cmake-3.28/Modules/CMakeDetermineCXXCompiler.cmake:126 (CMAKE_DETERMINE_COMPILER_ID)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
+      Compiler: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ 
+      Build flags: 
+      Id flags: -c 
+      
+      The output was:
+      0
+      
+      
+      Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CMakeCXXCompilerId.o"
+      
+      The CXX compiler identification is AppleClang, found in:
+        /Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/3.28.0/CompilerIdCXX/CMakeCXXCompilerId.o
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/Applications/CMake.app/Contents/share/cmake-3.28/Modules/CMakeDetermineCompilerABI.cmake:57 (try_compile)"
+      - "/Applications/CMake.app/Contents/share/cmake-3.28/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    checks:
+      - "Detecting C compiler ABI info"
+    directories:
+      source: "/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/\u8ba1\u7b97\u673a\u77e5\u8bc6/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-hfDfIP"
+      binary: "/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/\u8ba1\u7b97\u673a\u77e5\u8bc6/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-hfDfIP"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: "-L/usr/local/opt/flex/lib"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk"
+    buildResult:
+      variable: "CMAKE_C_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-hfDfIP'
+        
+        Run Build Command(s): /Applications/CMake.app/Contents/bin/cmake -E env VERBOSE=1 /usr/local/bin/gmake -f Makefile cmTC_038da/fast
+        gmake[1]: Entering directory '/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-hfDfIP'
+        /usr/local/bin/gmake  -f CMakeFiles/cmTC_038da.dir/build.make CMakeFiles/cmTC_038da.dir/build
+        gmake[2]: Entering directory '/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-hfDfIP'
+        Building C object CMakeFiles/cmTC_038da.dir/CMakeCCompilerABI.c.o
+        /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc   -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk   -v -Wl,-v -MD -MT CMakeFiles/cmTC_038da.dir/CMakeCCompilerABI.c.o -MF CMakeFiles/cmTC_038da.dir/CMakeCCompilerABI.c.o.d -o CMakeFiles/cmTC_038da.dir/CMakeCCompilerABI.c.o -c /Applications/CMake.app/Contents/share/cmake-3.28/Modules/CMakeCCompilerABI.c
+        Apple clang version 12.0.0 (clang-1200.0.32.29)
+        Target: x86_64-apple-darwin22.4.0
+        Thread model: posix
+        InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin
+        clang: warning: -Wl,-v: 'linker' input unused [-Wunused-command-line-argument]
+         "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang" -cc1 -triple x86_64-apple-macosx11.1.0 -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -Werror=implicit-function-declaration -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -mthread-model posix -mframe-pointer=all -fno-strict-return -masm-verbose -munwind-tables -target-sdk-version=11.1 -target-cpu penryn -dwarf-column-info -debugger-tuning=lldb -target-linker-version 609.8 -v -resource-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0 -dependency-file CMakeFiles/cmTC_038da.dir/CMakeCCompilerABI.c.o.d -skip-unused-modulemap-deps -MT CMakeFiles/cmTC_038da.dir/CMakeCCompilerABI.c.o -sys-header-deps -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -internal-isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/local/include -internal-isystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include -internal-externc-isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/include -internal-externc-isystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -Wno-reorder-init-list -Wno-implicit-int-float-conversion -Wno-c99-designator -Wno-final-dtor-non-final-class -Wno-extra-semi-stmt -Wno-misleading-indentation -Wno-quoted-include-in-framework-header -Wno-implicit-fallthrough -Wno-enum-enum-conversion -Wno-enum-float-conversion -fdebug-compilation-dir "/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-hfDfIP" -ferror-limit 19 -fmessage-length 0 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fgnuc-version=4.2.1 -fobjc-runtime=macosx-11.1.0 -fmax-type-align=16 -fdiagnostics-show-option -o CMakeFiles/cmTC_038da.dir/CMakeCCompilerABI.c.o -x c /Applications/CMake.app/Contents/share/cmake-3.28/Modules/CMakeCCompilerABI.c
+        clang -cc1 version 12.0.0 (clang-1200.0.32.29) default target x86_64-apple-darwin22.4.0
+        ignoring nonexistent directory "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/local/include"
+        ignoring nonexistent directory "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/Library/Frameworks"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include
+         /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/include
+         /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include
+         /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/System/Library/Frameworks (framework directory)
+        End of search list.
+        Linking C executable cmTC_038da
+        /Applications/CMake.app/Contents/bin/cmake -E cmake_link_script CMakeFiles/cmTC_038da.dir/link.txt --verbose=1
+        /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc  -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names -L/usr/local/opt/flex/lib -v -Wl,-v CMakeFiles/cmTC_038da.dir/CMakeCCompilerABI.c.o -o cmTC_038da 
+        Apple clang version 12.0.0 (clang-1200.0.32.29)
+        Target: x86_64-apple-darwin22.4.0
+        Thread model: posix
+        InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin
+         "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld" -demangle -lto_library /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libLTO.dylib -dynamic -arch x86_64 -platform_version macos 11.1.0 11.1 -syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -o cmTC_038da -L/usr/local/opt/flex/lib -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_038da.dir/CMakeCCompilerABI.c.o -lSystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/lib/darwin/libclang_rt.osx.a
+        @(#)PROGRAM:ld  PROJECT:ld64-609.8
+        BUILD 15:07:46 Dec 18 2020
+        configured to support archs: armv6 armv7 armv7s arm64 arm64e arm64_32 i386 x86_64 x86_64h armv6m armv7k armv7m armv7em
+        Library search paths:
+        	/usr/local/opt/flex/lib
+        	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/lib
+        Framework search paths:
+        	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/System/Library/Frameworks/
+        gmake[2]: Leaving directory '/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-hfDfIP'
+        gmake[1]: Leaving directory '/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-hfDfIP'
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/Applications/CMake.app/Contents/share/cmake-3.28/Modules/CMakeDetermineCompilerABI.cmake:127 (message)"
+      - "/Applications/CMake.app/Contents/share/cmake-3.28/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Parsed C implicit include dir info: rv=done
+        found start of include info
+        found start of implicit include info
+          add: [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include]
+          add: [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/include]
+          add: [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include]
+        end of search list found
+        collapse include dir [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include] ==> [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include]
+        collapse include dir [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/include] ==> [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/include]
+        collapse include dir [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include] ==> [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include]
+        implicit include dirs: [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/include;/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include]
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/Applications/CMake.app/Contents/share/cmake-3.28/Modules/CMakeDetermineCompilerABI.cmake:159 (message)"
+      - "/Applications/CMake.app/Contents/share/cmake-3.28/Modules/CMakeTestCCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Parsed C implicit link information:
+        link line regex: [^( *|.*[/\\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        ignore line: [Change Dir: '/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-hfDfIP']
+        ignore line: []
+        ignore line: [Run Build Command(s): /Applications/CMake.app/Contents/bin/cmake -E env VERBOSE=1 /usr/local/bin/gmake -f Makefile cmTC_038da/fast]
+        ignore line: [gmake[1]: Entering directory '/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-hfDfIP']
+        ignore line: [/usr/local/bin/gmake  -f CMakeFiles/cmTC_038da.dir/build.make CMakeFiles/cmTC_038da.dir/build]
+        ignore line: [gmake[2]: Entering directory '/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-hfDfIP']
+        ignore line: [Building C object CMakeFiles/cmTC_038da.dir/CMakeCCompilerABI.c.o]
+        ignore line: [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc   -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk   -v -Wl -v -MD -MT CMakeFiles/cmTC_038da.dir/CMakeCCompilerABI.c.o -MF CMakeFiles/cmTC_038da.dir/CMakeCCompilerABI.c.o.d -o CMakeFiles/cmTC_038da.dir/CMakeCCompilerABI.c.o -c /Applications/CMake.app/Contents/share/cmake-3.28/Modules/CMakeCCompilerABI.c]
+        ignore line: [Apple clang version 12.0.0 (clang-1200.0.32.29)]
+        ignore line: [Target: x86_64-apple-darwin22.4.0]
+        ignore line: [Thread model: posix]
+        ignore line: [InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin]
+        ignore line: [clang: warning: -Wl -v: 'linker' input unused [-Wunused-command-line-argument]]
+        ignore line: [ "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang" -cc1 -triple x86_64-apple-macosx11.1.0 -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -Werror=implicit-function-declaration -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -mthread-model posix -mframe-pointer=all -fno-strict-return -masm-verbose -munwind-tables -target-sdk-version=11.1 -target-cpu penryn -dwarf-column-info -debugger-tuning=lldb -target-linker-version 609.8 -v -resource-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0 -dependency-file CMakeFiles/cmTC_038da.dir/CMakeCCompilerABI.c.o.d -skip-unused-modulemap-deps -MT CMakeFiles/cmTC_038da.dir/CMakeCCompilerABI.c.o -sys-header-deps -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -internal-isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/local/include -internal-isystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include -internal-externc-isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/include -internal-externc-isystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -Wno-reorder-init-list -Wno-implicit-int-float-conversion -Wno-c99-designator -Wno-final-dtor-non-final-class -Wno-extra-semi-stmt -Wno-misleading-indentation -Wno-quoted-include-in-framework-header -Wno-implicit-fallthrough -Wno-enum-enum-conversion -Wno-enum-float-conversion -fdebug-compilation-dir "/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-hfDfIP" -ferror-limit 19 -fmessage-length 0 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fgnuc-version=4.2.1 -fobjc-runtime=macosx-11.1.0 -fmax-type-align=16 -fdiagnostics-show-option -o CMakeFiles/cmTC_038da.dir/CMakeCCompilerABI.c.o -x c /Applications/CMake.app/Contents/share/cmake-3.28/Modules/CMakeCCompilerABI.c]
+        ignore line: [clang -cc1 version 12.0.0 (clang-1200.0.32.29) default target x86_64-apple-darwin22.4.0]
+        ignore line: [ignoring nonexistent directory "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/local/include"]
+        ignore line: [ignoring nonexistent directory "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/Library/Frameworks"]
+        ignore line: [#include "..." search starts here:]
+        ignore line: [#include <...> search starts here:]
+        ignore line: [ /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include]
+        ignore line: [ /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/include]
+        ignore line: [ /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include]
+        ignore line: [ /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/System/Library/Frameworks (framework directory)]
+        ignore line: [End of search list.]
+        ignore line: [Linking C executable cmTC_038da]
+        ignore line: [/Applications/CMake.app/Contents/bin/cmake -E cmake_link_script CMakeFiles/cmTC_038da.dir/link.txt --verbose=1]
+        ignore line: [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc  -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -Wl -search_paths_first -Wl -headerpad_max_install_names -L/usr/local/opt/flex/lib -v -Wl -v CMakeFiles/cmTC_038da.dir/CMakeCCompilerABI.c.o -o cmTC_038da ]
+        ignore line: [Apple clang version 12.0.0 (clang-1200.0.32.29)]
+        ignore line: [Target: x86_64-apple-darwin22.4.0]
+        ignore line: [Thread model: posix]
+        ignore line: [InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin]
+        link line: [ "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld" -demangle -lto_library /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libLTO.dylib -dynamic -arch x86_64 -platform_version macos 11.1.0 11.1 -syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -o cmTC_038da -L/usr/local/opt/flex/lib -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_038da.dir/CMakeCCompilerABI.c.o -lSystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/lib/darwin/libclang_rt.osx.a]
+          arg [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld] ==> ignore
+          arg [-demangle] ==> ignore
+          arg [-lto_library] ==> ignore, skip following value
+          arg [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libLTO.dylib] ==> skip value of -lto_library
+          arg [-dynamic] ==> ignore
+          arg [-arch] ==> ignore
+          arg [x86_64] ==> ignore
+          arg [-platform_version] ==> ignore
+          arg [macos] ==> ignore
+          arg [11.1.0] ==> ignore
+          arg [11.1] ==> ignore
+          arg [-syslibroot] ==> ignore
+          arg [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk] ==> ignore
+          arg [-o] ==> ignore
+          arg [cmTC_038da] ==> ignore
+          arg [-L/usr/local/opt/flex/lib] ==> dir [/usr/local/opt/flex/lib]
+          arg [-search_paths_first] ==> ignore
+          arg [-headerpad_max_install_names] ==> ignore
+          arg [-v] ==> ignore
+          arg [CMakeFiles/cmTC_038da.dir/CMakeCCompilerABI.c.o] ==> ignore
+          arg [-lSystem] ==> lib [System]
+          arg [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/lib/darwin/libclang_rt.osx.a] ==> lib [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/lib/darwin/libclang_rt.osx.a]
+        Library search paths: [;/usr/local/opt/flex/lib;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/lib]
+        Framework search paths: [;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/System/Library/Frameworks/]
+        remove lib [System]
+        remove lib [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/lib/darwin/libclang_rt.osx.a]
+        collapse library dir [/usr/local/opt/flex/lib] ==> [/usr/local/opt/flex/lib]
+        collapse library dir [/usr/local/opt/flex/lib] ==> [/usr/local/opt/flex/lib]
+        collapse library dir [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/lib] ==> [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/lib]
+        collapse framework dir [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/System/Library/Frameworks/] ==> [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/System/Library/Frameworks]
+        implicit libs: []
+        implicit objs: []
+        implicit dirs: [/usr/local/opt/flex/lib;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/lib]
+        implicit fwks: [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/System/Library/Frameworks]
+      
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/Applications/CMake.app/Contents/share/cmake-3.28/Modules/CMakeDetermineCompilerABI.cmake:57 (try_compile)"
+      - "/Applications/CMake.app/Contents/share/cmake-3.28/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    checks:
+      - "Detecting CXX compiler ABI info"
+    directories:
+      source: "/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/\u8ba1\u7b97\u673a\u77e5\u8bc6/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-n3XtRw"
+      binary: "/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/\u8ba1\u7b97\u673a\u77e5\u8bc6/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-n3XtRw"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: "-L/usr/local/opt/flex/lib"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk"
+    buildResult:
+      variable: "CMAKE_CXX_ABI_COMPILED"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-n3XtRw'
+        
+        Run Build Command(s): /Applications/CMake.app/Contents/bin/cmake -E env VERBOSE=1 /usr/local/bin/gmake -f Makefile cmTC_aeb2f/fast
+        gmake[1]: Entering directory '/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-n3XtRw'
+        /usr/local/bin/gmake  -f CMakeFiles/cmTC_aeb2f.dir/build.make CMakeFiles/cmTC_aeb2f.dir/build
+        gmake[2]: Entering directory '/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-n3XtRw'
+        Building CXX object CMakeFiles/cmTC_aeb2f.dir/CMakeCXXCompilerABI.cpp.o
+        /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk   -v -Wl,-v -MD -MT CMakeFiles/cmTC_aeb2f.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_aeb2f.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_aeb2f.dir/CMakeCXXCompilerABI.cpp.o -c /Applications/CMake.app/Contents/share/cmake-3.28/Modules/CMakeCXXCompilerABI.cpp
+        Apple clang version 12.0.0 (clang-1200.0.32.29)
+        Target: x86_64-apple-darwin22.4.0
+        Thread model: posix
+        InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin
+        clang: warning: -Wl,-v: 'linker' input unused [-Wunused-command-line-argument]
+        ignoring nonexistent directory "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/include/c++/v1"
+         "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang" -cc1 -triple x86_64-apple-macosx11.1.0 -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -Werror=implicit-function-declaration -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -mthread-model posix -mframe-pointer=all -fno-strict-return -masm-verbose -munwind-tables -target-sdk-version=11.1 -target-cpu penryn -dwarf-column-info -debugger-tuning=lldb -target-linker-version 609.8 -v -resource-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0 -dependency-file CMakeFiles/cmTC_aeb2f.dir/CMakeCXXCompilerABI.cpp.o.d -skip-unused-modulemap-deps -MT CMakeFiles/cmTC_aeb2f.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -stdlib=libc++ -internal-isystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1 -internal-isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/local/include -internal-isystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include -internal-externc-isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/include -internal-externc-isystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -Wno-reorder-init-list -Wno-implicit-int-float-conversion -Wno-c99-designator -Wno-final-dtor-non-final-class -Wno-extra-semi-stmt -Wno-misleading-indentation -Wno-quoted-include-in-framework-header -Wno-implicit-fallthrough -Wno-enum-enum-conversion -Wno-enum-float-conversion -fdeprecated-macro -fdebug-compilation-dir "/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-n3XtRw" -ferror-limit 19 -fmessage-length 0 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fgnuc-version=4.2.1 -fobjc-runtime=macosx-11.1.0 -fcxx-exceptions -fexceptions -fmax-type-align=16 -fdiagnostics-show-option -o CMakeFiles/cmTC_aeb2f.dir/CMakeCXXCompilerABI.cpp.o -x c++ /Applications/CMake.app/Contents/share/cmake-3.28/Modules/CMakeCXXCompilerABI.cpp
+        clang -cc1 version 12.0.0 (clang-1200.0.32.29) default target x86_64-apple-darwin22.4.0
+        ignoring nonexistent directory "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/local/include"
+        ignoring nonexistent directory "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/Library/Frameworks"
+        #include "..." search starts here:
+        #include <...> search starts here:
+         /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1
+         /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include
+         /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/include
+         /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include
+         /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/System/Library/Frameworks (framework directory)
+        End of search list.
+        Linking CXX executable cmTC_aeb2f
+        /Applications/CMake.app/Contents/bin/cmake -E cmake_link_script CMakeFiles/cmTC_aeb2f.dir/link.txt --verbose=1
+        /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names -L/usr/local/opt/flex/lib -v -Wl,-v CMakeFiles/cmTC_aeb2f.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_aeb2f 
+        Apple clang version 12.0.0 (clang-1200.0.32.29)
+        Target: x86_64-apple-darwin22.4.0
+        Thread model: posix
+        InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin
+         "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld" -demangle -lto_library /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libLTO.dylib -dynamic -arch x86_64 -platform_version macos 11.1.0 11.1 -syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -o cmTC_aeb2f -L/usr/local/opt/flex/lib -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_aeb2f.dir/CMakeCXXCompilerABI.cpp.o -lc++ -lSystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/lib/darwin/libclang_rt.osx.a
+        @(#)PROGRAM:ld  PROJECT:ld64-609.8
+        BUILD 15:07:46 Dec 18 2020
+        configured to support archs: armv6 armv7 armv7s arm64 arm64e arm64_32 i386 x86_64 x86_64h armv6m armv7k armv7m armv7em
+        Library search paths:
+        	/usr/local/opt/flex/lib
+        	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/lib
+        Framework search paths:
+        	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/System/Library/Frameworks/
+        gmake[2]: Leaving directory '/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-n3XtRw'
+        gmake[1]: Leaving directory '/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-n3XtRw'
+        
+      exitCode: 0
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/Applications/CMake.app/Contents/share/cmake-3.28/Modules/CMakeDetermineCompilerABI.cmake:127 (message)"
+      - "/Applications/CMake.app/Contents/share/cmake-3.28/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Parsed CXX implicit include dir info: rv=done
+        found start of include info
+        found start of implicit include info
+          add: [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1]
+          add: [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include]
+          add: [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/include]
+          add: [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include]
+        end of search list found
+        collapse include dir [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1] ==> [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1]
+        collapse include dir [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include] ==> [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include]
+        collapse include dir [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/include] ==> [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/include]
+        collapse include dir [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include] ==> [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include]
+        implicit include dirs: [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1;/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/include;/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include]
+      
+      
+  -
+    kind: "message-v1"
+    backtrace:
+      - "/Applications/CMake.app/Contents/share/cmake-3.28/Modules/CMakeDetermineCompilerABI.cmake:159 (message)"
+      - "/Applications/CMake.app/Contents/share/cmake-3.28/Modules/CMakeTestCXXCompiler.cmake:26 (CMAKE_DETERMINE_COMPILER_ABI)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      Parsed CXX implicit link information:
+        link line regex: [^( *|.*[/\\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
+        ignore line: [Change Dir: '/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-n3XtRw']
+        ignore line: []
+        ignore line: [Run Build Command(s): /Applications/CMake.app/Contents/bin/cmake -E env VERBOSE=1 /usr/local/bin/gmake -f Makefile cmTC_aeb2f/fast]
+        ignore line: [gmake[1]: Entering directory '/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-n3XtRw']
+        ignore line: [/usr/local/bin/gmake  -f CMakeFiles/cmTC_aeb2f.dir/build.make CMakeFiles/cmTC_aeb2f.dir/build]
+        ignore line: [gmake[2]: Entering directory '/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-n3XtRw']
+        ignore line: [Building CXX object CMakeFiles/cmTC_aeb2f.dir/CMakeCXXCompilerABI.cpp.o]
+        ignore line: [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++   -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk   -v -Wl -v -MD -MT CMakeFiles/cmTC_aeb2f.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_aeb2f.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_aeb2f.dir/CMakeCXXCompilerABI.cpp.o -c /Applications/CMake.app/Contents/share/cmake-3.28/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [Apple clang version 12.0.0 (clang-1200.0.32.29)]
+        ignore line: [Target: x86_64-apple-darwin22.4.0]
+        ignore line: [Thread model: posix]
+        ignore line: [InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin]
+        ignore line: [clang: warning: -Wl -v: 'linker' input unused [-Wunused-command-line-argument]]
+        ignore line: [ignoring nonexistent directory "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/include/c++/v1"]
+        ignore line: [ "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang" -cc1 -triple x86_64-apple-macosx11.1.0 -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -Werror=implicit-function-declaration -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -mthread-model posix -mframe-pointer=all -fno-strict-return -masm-verbose -munwind-tables -target-sdk-version=11.1 -target-cpu penryn -dwarf-column-info -debugger-tuning=lldb -target-linker-version 609.8 -v -resource-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0 -dependency-file CMakeFiles/cmTC_aeb2f.dir/CMakeCXXCompilerABI.cpp.o.d -skip-unused-modulemap-deps -MT CMakeFiles/cmTC_aeb2f.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -stdlib=libc++ -internal-isystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1 -internal-isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/local/include -internal-isystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include -internal-externc-isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/include -internal-externc-isystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -Wno-reorder-init-list -Wno-implicit-int-float-conversion -Wno-c99-designator -Wno-final-dtor-non-final-class -Wno-extra-semi-stmt -Wno-misleading-indentation -Wno-quoted-include-in-framework-header -Wno-implicit-fallthrough -Wno-enum-enum-conversion -Wno-enum-float-conversion -fdeprecated-macro -fdebug-compilation-dir "/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-n3XtRw" -ferror-limit 19 -fmessage-length 0 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fgnuc-version=4.2.1 -fobjc-runtime=macosx-11.1.0 -fcxx-exceptions -fexceptions -fmax-type-align=16 -fdiagnostics-show-option -o CMakeFiles/cmTC_aeb2f.dir/CMakeCXXCompilerABI.cpp.o -x c++ /Applications/CMake.app/Contents/share/cmake-3.28/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [clang -cc1 version 12.0.0 (clang-1200.0.32.29) default target x86_64-apple-darwin22.4.0]
+        ignore line: [ignoring nonexistent directory "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/local/include"]
+        ignore line: [ignoring nonexistent directory "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/Library/Frameworks"]
+        ignore line: [#include "..." search starts here:]
+        ignore line: [#include <...> search starts here:]
+        ignore line: [ /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1]
+        ignore line: [ /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/include]
+        ignore line: [ /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/include]
+        ignore line: [ /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include]
+        ignore line: [ /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/System/Library/Frameworks (framework directory)]
+        ignore line: [End of search list.]
+        ignore line: [Linking CXX executable cmTC_aeb2f]
+        ignore line: [/Applications/CMake.app/Contents/bin/cmake -E cmake_link_script CMakeFiles/cmTC_aeb2f.dir/link.txt --verbose=1]
+        ignore line: [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -Wl -search_paths_first -Wl -headerpad_max_install_names -L/usr/local/opt/flex/lib -v -Wl -v CMakeFiles/cmTC_aeb2f.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_aeb2f ]
+        ignore line: [Apple clang version 12.0.0 (clang-1200.0.32.29)]
+        ignore line: [Target: x86_64-apple-darwin22.4.0]
+        ignore line: [Thread model: posix]
+        ignore line: [InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin]
+        link line: [ "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld" -demangle -lto_library /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libLTO.dylib -dynamic -arch x86_64 -platform_version macos 11.1.0 11.1 -syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -o cmTC_aeb2f -L/usr/local/opt/flex/lib -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_aeb2f.dir/CMakeCXXCompilerABI.cpp.o -lc++ -lSystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/lib/darwin/libclang_rt.osx.a]
+          arg [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld] ==> ignore
+          arg [-demangle] ==> ignore
+          arg [-lto_library] ==> ignore, skip following value
+          arg [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libLTO.dylib] ==> skip value of -lto_library
+          arg [-dynamic] ==> ignore
+          arg [-arch] ==> ignore
+          arg [x86_64] ==> ignore
+          arg [-platform_version] ==> ignore
+          arg [macos] ==> ignore
+          arg [11.1.0] ==> ignore
+          arg [11.1] ==> ignore
+          arg [-syslibroot] ==> ignore
+          arg [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk] ==> ignore
+          arg [-o] ==> ignore
+          arg [cmTC_aeb2f] ==> ignore
+          arg [-L/usr/local/opt/flex/lib] ==> dir [/usr/local/opt/flex/lib]
+          arg [-search_paths_first] ==> ignore
+          arg [-headerpad_max_install_names] ==> ignore
+          arg [-v] ==> ignore
+          arg [CMakeFiles/cmTC_aeb2f.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+          arg [-lc++] ==> lib [c++]
+          arg [-lSystem] ==> lib [System]
+          arg [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/lib/darwin/libclang_rt.osx.a] ==> lib [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/lib/darwin/libclang_rt.osx.a]
+        Library search paths: [;/usr/local/opt/flex/lib;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/lib]
+        Framework search paths: [;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/System/Library/Frameworks/]
+        remove lib [System]
+        remove lib [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/12.0.0/lib/darwin/libclang_rt.osx.a]
+        collapse library dir [/usr/local/opt/flex/lib] ==> [/usr/local/opt/flex/lib]
+        collapse library dir [/usr/local/opt/flex/lib] ==> [/usr/local/opt/flex/lib]
+        collapse library dir [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/lib] ==> [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/lib]
+        collapse framework dir [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/System/Library/Frameworks/] ==> [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/System/Library/Frameworks]
+        implicit libs: [c++]
+        implicit objs: []
+        implicit dirs: [/usr/local/opt/flex/lib;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/usr/lib]
+        implicit fwks: [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk/System/Library/Frameworks]
+      
+      
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/Applications/CMake.app/Contents/share/cmake-3.28/Modules/Internal/CheckSourceCompiles.cmake:101 (try_compile)"
+      - "/Applications/CMake.app/Contents/share/cmake-3.28/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/Applications/CMake.app/Contents/share/cmake-3.28/Modules/CheckCXXCompilerFlag.cmake:34 (cmake_check_compiler_flag)"
+      - "/Users/jiahuiwu/anaconda3/lib/python3.10/site-packages/pybind11/share/cmake/pybind11/pybind11Common.cmake:268 (check_cxx_compiler_flag)"
+      - "/Users/jiahuiwu/anaconda3/lib/python3.10/site-packages/pybind11/share/cmake/pybind11/pybind11Common.cmake:310 (_pybind11_return_if_cxx_and_linker_flags_work)"
+      - "/Users/jiahuiwu/anaconda3/lib/python3.10/site-packages/pybind11/share/cmake/pybind11/pybind11Common.cmake:376 (_pybind11_generate_lto)"
+      - "/Users/jiahuiwu/anaconda3/lib/python3.10/site-packages/pybind11/share/cmake/pybind11/pybind11Config.cmake:248 (include)"
+      - "CMakeLists.txt:16 (find_package)"
+    checks:
+      - "Performing Test HAS_FLTO"
+    directories:
+      source: "/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/\u8ba1\u7b97\u673a\u77e5\u8bc6/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-YYNYmj"
+      binary: "/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/\u8ba1\u7b97\u673a\u77e5\u8bc6/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-YYNYmj"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: "-L/usr/local/opt/flex/lib"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk"
+    buildResult:
+      variable: "HAS_FLTO"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-YYNYmj'
+        
+        Run Build Command(s): /Applications/CMake.app/Contents/bin/cmake -E env VERBOSE=1 /usr/local/bin/gmake -f Makefile cmTC_047fb/fast
+        gmake[1]: Entering directory '/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-YYNYmj'
+        /usr/local/bin/gmake  -f CMakeFiles/cmTC_047fb.dir/build.make CMakeFiles/cmTC_047fb.dir/build
+        gmake[2]: Entering directory '/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-YYNYmj'
+        Building CXX object CMakeFiles/cmTC_047fb.dir/src.cxx.o
+        /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ -DHAS_FLTO  -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk   -flto -MD -MT CMakeFiles/cmTC_047fb.dir/src.cxx.o -MF CMakeFiles/cmTC_047fb.dir/src.cxx.o.d -o CMakeFiles/cmTC_047fb.dir/src.cxx.o -c "/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-YYNYmj/src.cxx"
+        Linking CXX executable cmTC_047fb
+        /Applications/CMake.app/Contents/bin/cmake -E cmake_link_script CMakeFiles/cmTC_047fb.dir/link.txt --verbose=1
+        /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names -L/usr/local/opt/flex/lib  CMakeFiles/cmTC_047fb.dir/src.cxx.o -o cmTC_047fb  -flto 
+        gmake[2]: Leaving directory '/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-YYNYmj'
+        gmake[1]: Leaving directory '/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-YYNYmj'
+        
+      exitCode: 0
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/Applications/CMake.app/Contents/share/cmake-3.28/Modules/Internal/CheckSourceCompiles.cmake:101 (try_compile)"
+      - "/Applications/CMake.app/Contents/share/cmake-3.28/Modules/Internal/CheckCompilerFlag.cmake:18 (cmake_check_source_compiles)"
+      - "/Applications/CMake.app/Contents/share/cmake-3.28/Modules/CheckCXXCompilerFlag.cmake:34 (cmake_check_compiler_flag)"
+      - "/Users/jiahuiwu/anaconda3/lib/python3.10/site-packages/pybind11/share/cmake/pybind11/pybind11Common.cmake:268 (check_cxx_compiler_flag)"
+      - "/Users/jiahuiwu/anaconda3/lib/python3.10/site-packages/pybind11/share/cmake/pybind11/pybind11Common.cmake:304 (_pybind11_return_if_cxx_and_linker_flags_work)"
+      - "/Users/jiahuiwu/anaconda3/lib/python3.10/site-packages/pybind11/share/cmake/pybind11/pybind11Common.cmake:379 (_pybind11_generate_lto)"
+      - "/Users/jiahuiwu/anaconda3/lib/python3.10/site-packages/pybind11/share/cmake/pybind11/pybind11Config.cmake:248 (include)"
+      - "CMakeLists.txt:16 (find_package)"
+    checks:
+      - "Performing Test HAS_FLTO_THIN"
+    directories:
+      source: "/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/\u8ba1\u7b97\u673a\u77e5\u8bc6/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-FgFBhZ"
+      binary: "/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/\u8ba1\u7b97\u673a\u77e5\u8bc6/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-FgFBhZ"
+    cmakeVariables:
+      CMAKE_CXX_FLAGS: ""
+      CMAKE_EXE_LINKER_FLAGS: "-L/usr/local/opt/flex/lib"
+      CMAKE_OSX_ARCHITECTURES: ""
+      CMAKE_OSX_DEPLOYMENT_TARGET: ""
+      CMAKE_OSX_SYSROOT: "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk"
+    buildResult:
+      variable: "HAS_FLTO_THIN"
+      cached: true
+      stdout: |
+        Change Dir: '/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-FgFBhZ'
+        
+        Run Build Command(s): /Applications/CMake.app/Contents/bin/cmake -E env VERBOSE=1 /usr/local/bin/gmake -f Makefile cmTC_ac7d2/fast
+        gmake[1]: Entering directory '/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-FgFBhZ'
+        /usr/local/bin/gmake  -f CMakeFiles/cmTC_ac7d2.dir/build.make CMakeFiles/cmTC_ac7d2.dir/build
+        gmake[2]: Entering directory '/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-FgFBhZ'
+        Building CXX object CMakeFiles/cmTC_ac7d2.dir/src.cxx.o
+        /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++ -DHAS_FLTO_THIN  -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk   -flto=thin -MD -MT CMakeFiles/cmTC_ac7d2.dir/src.cxx.o -MF CMakeFiles/cmTC_ac7d2.dir/src.cxx.o.d -o CMakeFiles/cmTC_ac7d2.dir/src.cxx.o -c "/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-FgFBhZ/src.cxx"
+        Linking CXX executable cmTC_ac7d2
+        /Applications/CMake.app/Contents/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ac7d2.dir/link.txt --verbose=1
+        /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++  -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.1.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names -L/usr/local/opt/flex/lib  CMakeFiles/cmTC_ac7d2.dir/src.cxx.o -o cmTC_ac7d2  -flto=thin 
+        gmake[2]: Leaving directory '/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-FgFBhZ'
+        gmake[1]: Leaving directory '/Users/jiahuiwu/Library/Mobile Documents/com~apple~CloudDocs/计算机知识/CMU 10-414 Deep Learning Systems/hw4/build/CMakeFiles/CMakeScratch/TryCompile-FgFBhZ'
+        
+      exitCode: 0
+...
