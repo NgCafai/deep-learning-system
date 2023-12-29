@@ -452,8 +452,9 @@ def find_topo_sort(node_list: List[Value]) -> List[Value]:
 
 def topo_sort_dfs(node, visited, topo_order):
     """Post-order DFS"""
-    for i in node.inputs:
-        topo_sort_dfs(i, visited, topo_order)
+    for input_node in node.inputs:
+        if input_node not in visited:
+            topo_sort_dfs(input_node, visited, topo_order)
 
     if node not in visited:
         visited.add(node)

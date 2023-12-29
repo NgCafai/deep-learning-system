@@ -657,6 +657,8 @@ def broadcast_to(array, new_shape):
 
 
 def reshape(array, new_shape):
+    if not array.is_compact():
+        array = array.compact()
     return array.reshape(new_shape)
 
 

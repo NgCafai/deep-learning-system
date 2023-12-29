@@ -198,7 +198,13 @@ class BroadcastTo(TensorOp):
         # 找到 input_shape_adjusted 和 output_shape 不同的位置，这些位置就是需要 reduce 的维度
         axes_to_reduce = [axis for axis, (in_dim, out_dim) in enumerate(
             zip(input_shape_adjusted, output_shape)) if in_dim != out_dim]
-        grad = summation(out_grad, tuple(axes_to_reduce))
+
+        # grad = summation(out_grad, tuple(axes_to_reduce))
+        
+        # The sum() function in ndarray.py only support sum on one axis at each time
+        grad = out_grad
+        for axis in axes_to_reduce:
+            grad = summation(grad, axis, keepdims=True)
 
         if len(input_shape) > 0:
             grad = reshape(grad, input_shape)
@@ -210,11 +216,12 @@ def broadcast_to(a, shape):
 
 
 class Summation(TensorOp):
-    def __init__(self, axes: Optional[tuple] = None):
+    def __init__(self, axes: Optional[tuple] = None, keepdims=False):
         self.axes = axes
+        self.keepdims = keepdims
 
     def compute(self, a):
-        return array_api.sum(a, self.axes)
+        return array_api.sum(a, self.axes, keepdims=self.keepdims)
 
     def gradient(self, out_grad, node):
         reduce_shape = list(node.inputs[0].shape)
@@ -229,8 +236,8 @@ class Summation(TensorOp):
         return broadcast_to(grad, node.inputs[0].shape)
 
 
-def summation(a, axes=None):
-    return Summation(axes)(a)
+def summation(a, axes=None, keepdims=False):
+    return Summation(axes, keepdims)(a)
 
 
 class MatMul(TensorOp):
@@ -310,10 +317,12 @@ class ReLU(TensorOp):
 
     def gradient(self, out_grad, node):
         input_data = node.inputs[0].realize_cached_data()
-        mask = array_api.ones_like(input_data)
-        mask[input_data < 0] = 0
-        return out_grad * Tensor(mask)
-
+        # mask = array_api.ones_like(input_data)
+        # mask[input_data < 0] = 0
+        # return out_grad * Tensor(mask)
+        mask = input_data >= 0
+        return out_grad * mask
+    
 
 def relu(a):
     return ReLU()(a)
@@ -464,6 +473,7 @@ class Conv(TensorOp):
             .compact()
         )
         A = A.reshape((math.prod(A.shape[:-3]), inner_dim))
+        B = B.compact()
         out = A @ B.reshape((inner_dim, C_out))
         out = out.reshape((N, H-K+1, W-K+1, C_out))
 
@@ -476,19 +486,33 @@ class Conv(TensorOp):
         return out
 
     def gradient(self, out_grad, node):
-        A, B = node.inputs
+        A, B = node.inputs # A and B are of type Tensor
         N, H, W, C_in = A.shape
         K, _, _, C_out = B.shape
-        Ns, Hs, Ws, Cs = A.strides
+        Ns, Hs, Ws, Cs = A.realize_cached_data().strides
 
-        # gradient of A
-        pad_axes = [(0, 0)] + [(K - 1, K - 1)] * 2 + [(0, 0)]
-        out_grad_pad = out_grad.pad(pad_axes)
-        W_t = B.flip((0, 1)).permute((0, 1, 3, 2))
-        A_grad = conv(out_grad_pad, W_t)
+        if self.stride > 1:
+            out_grad = dilate(out_grad, (1, 2), self.stride - 1)
 
-        # gradient of B(the weight)
+        """
+        gradient of A
+        """
+        # B_t = B.flip((0, 1)).permute((0, 1, 3, 2))
+        B_t = flip(B, (0, 1)).transpose((2, 3))
+        A_grad = conv(out_grad, B_t, padding=K-1-self.padding)
 
+        """
+        gradient of B(the weight)
+        """
+        # A_t = A.permute((3, 1, 2, 0))
+        A_t = A.transpose((0, 3))
+        # out_grad_t = out_grad.permute((1, 2, 0, 3))
+        out_grad_t = out_grad.transpose((0, 2)).transpose((0, 1))
+        B_grad_t = conv(A_t, out_grad_t, padding=self.padding)
+        # B_grad = B_grad_t.permute((1, 2, 0, 3))
+        B_grad = B_grad_t.transpose((0, 2)).transpose((0, 1))
+
+        return A_grad, B_grad
 
 
 
